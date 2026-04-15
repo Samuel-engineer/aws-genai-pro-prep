@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Week 1 — AWS Fundamentals : Lambda + API Gateway + S3
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.12
+    MemorySize: 256
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+
+Resources:
+  # --------------- S3 Bucket ---------------
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "genai-prep-${Environment}-${AWS::AccountId}"
+      VersioningConfiguration:
+        Status: Enabled
+
+  # --------------- Lambda Function ---------------
+  GenAIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: MyFirstGenAIFunction
+      Handler: lambda_function.lambda_handler
+      CodeUri: src/
+      Layers:
+        - !Sub "arn:aws:lambda:us-east-1:017000801446:layer:AWSLambdaPowertoolsPythonV3-python312-x86_64:31"
+      Environment:
+        Variables:
+          S3_BUCKET: !Ref DataBucket
+          ENVIRONMENT: !Ref Environment
+          POWERTOOLS_SERVICE_NAME: genai-week1
+          POWERTOOLS_LOG_LEVEL: INFO
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref DataBucket
+      Events:
+        HelloApi:
+          Type: HttpApi
+          Properties:
+            Path: /hello
+            Method: GET
+        S3ListApi:
+          Type: HttpApi
+          Properties:
+            Path: /s3/list
+            Method: GET
+        S3PutApi:
+          Type: HttpApi
+          Properties:
+            Path: /s3/put
+            Method: POST
+
+Outputs:
+  ApiEndpoint:
+    Description: URL de l'API Gateway HTTP
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+  FunctionArn:
+    Description: ARN de la Lambda
+    Value: !GetAtt GenAIFunction.Arn
+  BucketName:
+    Description: Nom du bucket S3
+    Value: !Ref DataBucket

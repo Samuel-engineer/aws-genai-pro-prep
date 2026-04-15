@@ -1,0 +1,21 @@
+[project]
+name = "week-1-aws-fundamentals"
+description = "Week 1 — AWS Fundamentals pour la préparation GenAI Pro"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "integration: tests nécessitant un stack déployé",
+]
+addopts = "-v --tb=short -m 'not integration'"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]

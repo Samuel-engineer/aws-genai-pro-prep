@@ -1,0 +1,5 @@
+{
+    "path": "/s3/put",
+    "httpMethod": "POST",
+    "body": "{\"bucket\": \"genai-prep-dev-123456789\", \"key\": \"test/sample.txt\", \"content\": \"Hello GenAI!\"}"
+}

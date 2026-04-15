@@ -1,0 +1,8 @@
+{
+    "path": "/s3/list",
+    "httpMethod": "GET",
+    "queryStringParameters": {
+        "bucket": "genai-prep-dev-123456789",
+        "prefix": ""
+    }
+}

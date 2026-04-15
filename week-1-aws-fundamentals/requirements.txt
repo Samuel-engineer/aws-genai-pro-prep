@@ -1,0 +1,5 @@
+# Production dependencies for Lambda
+# Note: boto3 is already included in the Lambda runtime
+# Only add packages needed by the Lambda function itself
+
+aws-lambda-powertools>=2.0.0  # AWS best practices, routing, logging

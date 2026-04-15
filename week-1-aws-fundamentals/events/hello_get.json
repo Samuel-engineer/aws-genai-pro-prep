@@ -1,0 +1,7 @@
+{
+    "path": "/hello",
+    "httpMethod": "GET",
+    "queryStringParameters": {
+        "name": "Apprenti Pro"
+    }
+}
